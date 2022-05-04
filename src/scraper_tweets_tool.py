@@ -126,16 +126,25 @@ class TwitterSearch:
         supabase_con.commit()
     
     def followers_count(self):
+        followers_list = []
         for i in id:
             # fetching the user
             user = api.get_user(screen_name=i)
+            followers_list.append([datetime.now(), user.followers_count, user.id, user.screen_name])
+        followers_list_df = pd.DataFrame(followers_list, columns=['created_at', 'followers_count', 'id', 'username'])
+        for i in followers_list_df.index:
 
             sql_query = """
-                INSERT INTO followers_count (date, 
+                INSERT INTO followers_candidate (created_at, 
                                             followers_count, 
                                             id, 
-                                            nome) values('%s', '%s', '%s', '%s')
+                                            username) values('%s', '%s', '%s', '%s')
                 ON CONFLICT DO NOTHING;
-            """ %  (datetime.now(), user.followers_count, user.id, user.screen_name) 
-            heroku_cur.execute(sql_query)
-        heroku_con.commit()
+            """ %  (followers_list_df['created_at'][i], 
+                    followers_list_df['followers_count'][i], 
+                    followers_list_df['id'][i], 
+                    followers_list_df['username'][i]) 
+
+            supabase_cur.execute(sql_query)
+        supabase_con.commit()
+        supabase_con.close()
