@@ -26,8 +26,10 @@ jobs:
       - name: Install dependencies
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
       - uses: datapane/build-action@v2
         with:
           run: poetry run
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
+          requirements: "venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}"
