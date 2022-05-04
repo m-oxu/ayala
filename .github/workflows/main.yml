@@ -27,9 +27,13 @@ jobs:
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ env.requirements }}-${{ env.version }}
       - uses: datapane/build-action@v2
         with:
-          run: poetry run
-          script: "src/datapane_report.py"
+          script: "reports/financials.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
-          requirements: "venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}"
+          version: "${{ env.version }}"
+          requirements: "${{ env.requirements }}"
