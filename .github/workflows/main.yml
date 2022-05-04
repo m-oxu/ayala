@@ -1,7 +1,9 @@
 
 name: Ayala - Manually
 
-on: workflow_dispatch
+on: 
+  schedule:
+      - cron: "0 3 * * *"
 
 jobs:
   build:
