@@ -16,6 +16,9 @@ import os
 from datapane.client.api.report.blocks import BigNumber
 
 load_dotenv('.env') 
+import datapane as dp
+datapane_token = os.environ.get("DATAPANE_TOKEN")
+dp.login(token=datapane_token)
 supabase_uri = os.environ.get("SUPABASE_URI")
 con = psycopg2.connect(supabase_uri, sslmode='require')
 cur = con.cursor()
