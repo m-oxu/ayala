@@ -4,10 +4,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Run Datapane Reports
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+
+      - name: checkout repo content
+        uses: actions/checkout@v3 # checkout the repository content to github runner
+
+      - name: setup python
+        uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          ref: main
+          python-version: '3.x' # install the python version needed
           
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
