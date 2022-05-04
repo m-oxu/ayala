@@ -1,3 +1,17 @@
+from requirements_install import install_packages
+requirement_list ["python-dotenv==0.20.0",
+"psycopg2-binary==2.9.3",
+"pandas==1.4.2",
+"sqlalchemy==1.4.36",
+"datapane==0.14.0",
+"unidecode==1.3.4",
+"wordcloud==1.8.1",
+"yellowbrick==1.4",
+"scikit-learn==1.0.2",
+"plotly==5.7.0"]
+
+install_packages(requirement_list)
+
 import datapane as dp
 from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words
 from datetime import datetime, timedelta
