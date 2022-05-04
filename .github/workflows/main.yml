@@ -27,20 +27,10 @@ jobs:
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ env.requirements }}-${{ env.version }}
-      - uses: actions/cache@v2
-        with:
-          path: ~/.venv
-          key: ${{ runner.os }}-pip-${{ env.requirements }}-${{ env.version }}
-      - name: Create and activate venv
-        run: |
-          python3 -m venv ~/.venv
-          echo "~/.venv/bin" >> $GITHUB_PATH
+      - name: Poetry run
+        run: poetry run
+        
       - uses: datapane/build-action@v2
         with:
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
-          requirements: "${{ env.requirements }}"
