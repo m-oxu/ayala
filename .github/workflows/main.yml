@@ -2,7 +2,6 @@ on: workflow_dispatch
 jobs:
   build_report:
     runs-on: ubuntu-latest
-    name: Run Datapane Reports
     steps:
 
       - name: checkout repo content
