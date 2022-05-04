@@ -28,7 +28,6 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       - uses: datapane/build-action@v2
         with:
+          path: .venv
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
-          version: "${{ steps.full-python-version.outputs.version }}"
-          requirements: "${{ hashFiles('**/poetry.lock') }}"
