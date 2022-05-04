@@ -4,10 +4,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Run end-of-week Datapane reports
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          python-version: 3.x
           
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
@@ -26,8 +26,21 @@ jobs:
       - name: Install dependencies
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ env.requirements }}-${{ env.version }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.venv
+          key: ${{ runner.os }}-pip-${{ env.requirements }}-${{ env.version }}
+      - name: Create and activate venv
+        run: |
+          python3 -m venv ~/.venv
+          echo "~/.venv/bin" >> $GITHUB_PATH
       - uses: datapane/build-action@v2
         with:
-          path: .venv
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
+          requirements: "${{ env.requirements }}"
