@@ -31,4 +31,5 @@ jobs:
         with:
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
-          requirements: ${{ steps.full-python-version.outputs.version }}
+          requirements: "${{ hashFiles('**/poetry.lock') }}"
+          version: "${{ steps.full-python-version.outputs.version }}"
