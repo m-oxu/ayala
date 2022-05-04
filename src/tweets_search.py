@@ -6,5 +6,5 @@ twitter_class.search_on_twitter()
 twitter_class.turn_list_in_dataframe()
 twitter_class.insert_data_in_postgresql()
 twitter_class.followers_count()
-
-execution_function_dapane()
+twitter_class.delete_repeated_results()
+#execution_function_dapane()
