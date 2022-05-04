@@ -1,5 +1,5 @@
 
-name: Ayala - Manually
+name: Ayala - Schedule
 
 on: 
   schedule:
