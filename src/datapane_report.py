@@ -1,5 +1,5 @@
 from requirements_install import install_packages
-requirement_list ["python-dotenv==0.20.0",
+requirement_list = ["python-dotenv==0.20.0",
 "psycopg2-binary==2.9.3",
 "pandas==1.4.2",
 "sqlalchemy==1.4.36",
