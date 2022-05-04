@@ -13,3 +13,4 @@ jobs:
         with:
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
+          SUPABASE_URI: ${{ secrets.SUPABASE_URI }}
