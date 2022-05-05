@@ -208,13 +208,15 @@ plot_followers = px.line(data_frame=df_followers, x='created_at', y='followers_c
 plot_followers.update_xaxes(title='Quantidade de Seguidores').update_yaxes(title='Data')
 
 
-# Building report in Datapane
+df['date'] = df.datetime.dt.date
+yesterday = df.date.max() - timedelta(days=1)
+
 report = dp.Report(
    dp.Group(
       dp.BigNumber(
          heading="Número de Tweets Armazenados", 
          value=f"{len(df):,}",
-         change=f"{tweets_last_week:,} since last week",
+         change=f"{len(df.query('date > @yesterday')):,} tweets desde ontem",
          is_upward_change=True
       ),
       dp.BigNumber(
@@ -237,7 +239,7 @@ report = dp.Report(
    ),
    dp.Group(
        dp.Plot(followers_x_likes_plot),
-       dp.Plot(followers_x_likes_plot), columns=2
+       dp.Plot(followers_x_retweets_plot), columns=2
    ),
    dp.Plot(location_plot),
     dp.Group(
