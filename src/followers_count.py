@@ -6,6 +6,7 @@ import pandas as pd
 import snscrape.modules.twitter as sntwitter
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
+import tweepy
 
 # Credentials
 load_dotenv('.env') 
