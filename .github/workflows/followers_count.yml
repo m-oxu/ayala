@@ -1,4 +1,4 @@
-name: Ayala - Schedule
+name: Followers Count - Schedule
 
 on: 
   schedule:
