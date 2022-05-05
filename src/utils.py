@@ -1,6 +1,6 @@
 import re
 from sklearn.feature_extraction.text import CountVectorizer
-import unidecodedata
+import unicodedata2 as unicodedata
 
 def preprocessing_data(df, stop_port):
     nfkd = unicodedata.normalize('NFKD', df)
