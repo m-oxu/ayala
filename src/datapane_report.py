@@ -9,7 +9,7 @@ requirement_list = ["python-dotenv==0.20.0",
 "yellowbrick==1.4",
 "scikit-learn==1.0.2",
 "plotly==5.7.0",
-"unidecodedata2==14.0.0"]
+"unidecodedata2"]
 
 install_packages(requirement_list)
 
