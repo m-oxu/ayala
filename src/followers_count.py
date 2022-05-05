@@ -36,26 +36,25 @@ id = {"@jairbolsonaro": 128372940,
       "@lfdavilaoficial": 900831846258413568,
       "@andrejanonesadv": 1198004545}
 
-def followers_count(self):
-    followers_list = []
-    for i in id:
-        # fetching the user
-        user = api.get_user(screen_name=i)
-        followers_list.append([datetime.now(), user.followers_count, user.id, user.screen_name])
-    followers_list_df = pd.DataFrame(followers_list, columns=['created_at', 'followers_count', 'tweet_id', 'username'])
-    for i in followers_list_df.index:
+followers_list = []
+for i in id:
+  # fetching the user
+  user = api.get_user(screen_name=i)
+  followers_list.append([datetime.now(), user.followers_count, user.id, user.screen_name])
+followers_list_df = pd.DataFrame(followers_list, columns=['created_at', 'followers_count', 'tweet_id', 'username'])
+for i in followers_list_df.index:
 
-        sql_query = """
-            INSERT INTO followers_candidate (created_at, 
-                                        followers_count, 
-                                        tweet_id, 
-                                        username) values('%s', '%s', '%s', '%s')
-            ON CONFLICT DO NOTHING;
-        """ %  (followers_list_df['created_at'][i], 
-                followers_list_df['followers_count'][i], 
-                followers_list_df['tweet_id'][i], 
-                followers_list_df['username'][i]) 
+  sql_query = """
+      INSERT INTO followers_candidate (created_at, 
+                                  followers_count, 
+                                  tweet_id, 
+                                  username) values('%s', '%s', '%s', '%s')
+      ON CONFLICT DO NOTHING;
+  """ %  (followers_list_df['created_at'][i], 
+          followers_list_df['followers_count'][i], 
+          followers_list_df['tweet_id'][i], 
+          followers_list_df['username'][i]) 
 
-        supabase_cur.execute(sql_query)
-    supabase_con.commit()
-    supabase_con.close()
+  supabase_cur.execute(sql_query)
+supabase_con.commit()
+supabase_con.close()
