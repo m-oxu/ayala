@@ -1,5 +1,4 @@
 from scraper_tweets_tool import TwitterSearch
-from datapane_report import execution_function_dapane
 twitter_class = TwitterSearch()
 twitter_class.get_query_list()
 twitter_class.search_on_twitter()
