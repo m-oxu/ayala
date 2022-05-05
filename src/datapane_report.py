@@ -52,15 +52,17 @@ stop_port = [i.replace('\n','') for i in stop_port]
 stop_port = [unidecode(i) for i in stop_port]
 
 def preprocessing_data(df):
-    df = df.apply(lambda x: x.lower())
-    df = df.apply(lambda x: re.sub(r"http\S+","", x))
-    df = df.apply(lambda x: re.sub(r"www.\S+","", x))
-    df = df.apply(lambda x: re.sub(r"@[A-Za-z0-9_]+","", x))
-    df = df.apply(lambda x: re.sub(r"#[A-Za-z0-9_]+","", x))
-    df = df.apply(lambda x: x.rstrip())
-    df = df.apply(lambda x: re.sub("[^a-z0-9]"," ", x))
-    df = df.apply(lambda x: x.split())
-    df = df.map(lambda x: ' '.join([word for word in x if word not in (stop_port)])) 
+    nfkd = unicodedata.normalize('NFKD', df)
+    df = u"".join([c for c in nfkd if not unicodedata.combining(c)])
+    df = df.lower()
+    df = re.sub(r"http\S+","", df)
+    df = re.sub(r"www.\S+","", df)
+    df = re.sub(r"@[A-Za-z0-9_]+","", df)
+    df = re.sub(r"#[A-Za-z0-9_]+","", df)
+    df = df.rstrip()
+    df = re.sub("[^a-z0-9]"," ", df)
+    df = df.split()
+    df = ' '.join([word for word in df if word not in (stop_port)])
 
     return df
 
