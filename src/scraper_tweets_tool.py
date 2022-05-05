@@ -12,13 +12,6 @@ from sqlalchemy import create_engine
 # Credentials
 load_dotenv('.env') 
 
-access_token = os.environ.get("ACCESS_TOKEN")
-access_token_secret = os.environ.get("ACCESS_TOKEN_SECRET")
-
-api_key = os.environ.get("API_KEY")
-api_key_secret = os.environ.get("API_SECRET_KEY")
-api_token = os.environ.get("API_TOKEN")
-
 heroku_uri = os.environ.get("HEROKU_URI")
 supabase_uri = os.environ.get("SUPABASE_URI")
 
@@ -27,20 +20,6 @@ heroku_cur = heroku_con.cursor()
 
 supabase_con = psycopg2.connect(supabase_uri, sslmode='require')
 supabase_cur = supabase_con.cursor()
-
-# authorization of consumer key and consumer secret
-auth = tweepy.OAuthHandler(api_key, api_key_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth)
-
-# the ID of the user
-id = {"@jairbolsonaro": 128372940, 
-      "@verapstu": 634712862, 
-      "@leopericlesup": 983340254081048576, 
-      "@lulaoficial": 2670726740, 
-      "@cirogomes": 33374761, 
-      "@lfdavilaoficial": 900831846258413568,
-      "@andrejanonesadv": 1198004545}
 
 class TwitterSearch:
 
