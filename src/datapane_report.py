@@ -28,6 +28,7 @@ import datapane as dp
 from dotenv import Any, load_dotenv
 import os
 from datapane.client.api.report.blocks import BigNumber
+import requests
 
 supabase_uri = os.environ.get("SUPABASE_URI")
 con = psycopg2.connect(supabase_uri, sslmode='require')
@@ -47,9 +48,7 @@ df = pd.DataFrame(tupples, columns=['datetime', 'tweet_id', 'text', 'username', 
 df.datetime = pd.to_datetime(df.datetime)
 # Importing stopwords from assets/data
       
-stop_port = list(open('/app/ayala/src/stopwords-pt.txt', 'rb'))
-stop_port = [i.replace('\n','') for i in stop_port]
-stop_port = [unidecode(i) for i in stop_port]
+stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
 
 def preprocessing_data(df):
     nfkd = unicodedata.normalize('NFKD', df)
