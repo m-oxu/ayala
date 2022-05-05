@@ -147,7 +147,6 @@ class TwitterSearch:
 
             supabase_cur.execute(sql_query)
         supabase_con.commit()
-        supabase_con.close()
     
     def delete_repeated_results(self):
         sql_query = """DELETE FROM historical_tweets
