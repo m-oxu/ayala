@@ -1,5 +1,6 @@
-[![run_search_tweets](https://github.com/ICEI-PUC-Minas-PPL-CD/2022-1-pcd-si-ayala/actions/workflows/main.yml/badge.svg)](https://github.com/ICEI-PUC-Minas-PPL-CD/2022-1-pcd-si-ayala/actions/workflows/main.yml)
-[![AyalaBot Scheduled](https://github.com/ICEI-PUC-Minas-PPL-CD/2022-1-pcd-si-ayala/actions/workflows/bot_hosting.yml/badge.svg)](https://github.com/ICEI-PUC-Minas-PPL-CD/2022-1-pcd-si-ayala/actions/workflows/bot_hosting.yml)
+[![Ayala Job](https://github.com/m-oxu/ayala/actions/workflows/ayala_schedule.yml/badge.svg)](https://github.com/m-oxu/ayala/actions/workflows/ayala_schedule.yml)
+[![Datapane Report Job](https://github.com/m-oxu/ayala/actions/workflows/report_datapane.yml/badge.svg)](https://github.com/m-oxu/ayala/actions/workflows/report_datapane.yml)
+[![Followers Job](https://github.com/m-oxu/ayala/actions/workflows/followers_count.yml/badge.svg)](https://github.com/m-oxu/ayala/actions/workflows/followers_count.yml)
 
 # Ayala
 O objetivo desse projeto é desenvolver um sistema inteligente que busque estimar a aceitação nas redes sociais de pré-candidates/candidates políticos à Presidência da República do ano de 2022. O nome do projeto foi inspirado em uma figura política latinoamericana esquecida pela história por muito tempo, chamada Prudencia Ayala. 
