@@ -543,6 +543,7 @@ viagem
 vindo
 vinte
 você
+vc
 vocês
 vos
 vossa
