@@ -1,6 +1,7 @@
 import re
 from sklearn.feature_extraction.text import CountVectorizer
 import unicodedata2 as unicodedata
+import requests
 
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
 def preprocessing_data(df):
