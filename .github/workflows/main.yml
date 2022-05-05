@@ -1,4 +1,6 @@
-on: workflow_dispatch
+on: 
+  schedule:
+    - cron: "30 3 * * *"
 jobs:
   build_report:
     runs-on: ubuntu-latest
