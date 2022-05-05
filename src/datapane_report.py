@@ -203,7 +203,7 @@ con.close()
 df_followers = pd.DataFrame(tupples, columns=['id', 'tweet_id', 'created_at', 'username', 'followers_count'])
 plot_followers = px.line(data_frame=df_followers, x='created_at', y='followers_count', 
                          color='username', template='plotly_white', 
-                         title='Número de tweets por quantidade de palavras', 
+                         title='Quantidade de Seguidores por Pessoa Pré-Candidata', 
                          width=900, height=600)
 plot_followers.update_xaxes(title='Quantidade de Seguidores').update_yaxes(title='Data')
 
