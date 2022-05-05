@@ -50,21 +50,6 @@ df.datetime = pd.to_datetime(df.datetime)
       
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
 
-def preprocessing_data(df):
-    nfkd = unicodedata.normalize('NFKD', df)
-    df = u"".join([c for c in nfkd if not unicodedata.combining(c)])
-    df = df.lower()
-    df = re.sub(r"http\S+","", df)
-    df = re.sub(r"www.\S+","", df)
-    df = re.sub(r"@[A-Za-z0-9_]+","", df)
-    df = re.sub(r"#[A-Za-z0-9_]+","", df)
-    df = df.rstrip()
-    df = re.sub("[^a-z0-9]"," ", df)
-    df = df.split()
-    df = ' '.join([word for word in df if word not in (stop_port)])
-
-    return df
-
 df['clean_text'] = preprocessing_data(df=df.text, stop_port=stop_port)
 
 #########################################################################################################################
