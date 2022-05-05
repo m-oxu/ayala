@@ -389,6 +389,7 @@ puderam
 pôde
 põe
 põem
+pq
 quais
 qual
 qualquer
