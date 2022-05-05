@@ -125,29 +125,6 @@ class TwitterSearch:
             supabase_cur.execute(sql_query)
         supabase_con.commit()
     
-    def followers_count(self):
-        followers_list = []
-        for i in id:
-            # fetching the user
-            user = api.get_user(screen_name=i)
-            followers_list.append([datetime.now(), user.followers_count, user.id, user.screen_name])
-        followers_list_df = pd.DataFrame(followers_list, columns=['created_at', 'followers_count', 'id', 'username'])
-        for i in followers_list_df.index:
-
-            sql_query = """
-                INSERT INTO followers_candidate (created_at, 
-                                            followers_count, 
-                                            id, 
-                                            username) values('%s', '%s', '%s', '%s')
-                ON CONFLICT DO NOTHING;
-            """ %  (followers_list_df['created_at'][i], 
-                    followers_list_df['followers_count'][i], 
-                    followers_list_df['id'][i], 
-                    followers_list_df['username'][i]) 
-
-            supabase_cur.execute(sql_query)
-        supabase_con.commit()
-    
     def delete_repeated_results(self):
         sql_query = """DELETE FROM historical_tweets
                         WHERE id IN
