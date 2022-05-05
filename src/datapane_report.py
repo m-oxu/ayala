@@ -40,7 +40,16 @@ sql = "select * from historical_tweets"
 cur.execute(sql)
 tupples = cur.fetchall()
 con.close()
-df = pd.DataFrame(tupples, columns=['datetime', 'tweet_id', 'text', 'username', "verified", "followers", "location", "likes", "retweets", "id"])
+df = pd.DataFrame(tupples, columns=['datetime', 
+                                    'tweet_id', 
+                                    'text', 
+                                    'username', 
+                                    "verified", 
+                                    "followers", 
+                                    "location", 
+                                    "likes", 
+                                    "retweets", 
+                                    "id"])
 
 #########################################################################################################################
 ################################################## Data Pre-processing ##################################################
@@ -88,38 +97,57 @@ plt.axis("off")
 
 # Hashtags
 hashtags_df = df.hashtags.value_counts().reset_index().rename(columns={'index':'hashtags', 'hashtags':'count'})
-plot_hashtags = px.histogram(data_frame=hashtags_df[:30], x='hashtags', y='count', template='plotly_white', title="As 30 Maiores Hashtags", width=900, height=600)
+plot_hashtags = px.histogram(data_frame=hashtags_df[:30], x='hashtags', y='count', 
+                             template='plotly_white', 
+                             title="As 30 Maiores Hashtags", 
+                             width=900, height=600)
 plot_hashtags.update_xaxes(categoryorder='total descending', title='Hashtags').update_yaxes(title='Count')
 
 # Mentions
 mentions_df = df.mentions.value_counts().reset_index().rename(columns={'index':'mentions', 'mentions':'count'})
-plot_mentions = px.histogram(data_frame=mentions_df[:30], x='mentions', y='count', template='plotly_white', title="As 30 Maiores Menções", width=900, height=600)
+plot_mentions = px.histogram(data_frame=mentions_df[:30], x='mentions', y='count', 
+                             template='plotly_white', 
+                             title="As 30 Maiores Menções", 
+                             width=900, height=600)
 plot_mentions.update_xaxes(categoryorder='total descending', title='Mentions').update_yaxes(title='Count')
 
 # Unigram counts
 common_words = get_top_n_words(df['clean_text'], 30)    
 df1 = pd.DataFrame(common_words, columns = ['review', 'count'])
-plot_unigram_words = px.histogram(data_frame=df1, x='review', y='count', template='plotly_white', title="Quantidade de Ocorrências de Unigramas", width=900, height=600)
+plot_unigram_words = px.histogram(data_frame=df1, x='review', y='count', 
+                                  template='plotly_white', 
+                                  title="Quantidade de Ocorrências de Unigramas", 
+                                  width=900, height=600)
 plot_unigram_words.update_xaxes(categoryorder='total descending', title='Unigram Words').update_yaxes(title='Count')
 
 # Bigram counts
 common_words2 = get_top_n_bigram(df['clean_text'], 30)
 df2 = pd.DataFrame(common_words2, columns=['review', "count"])
-plot_bigram_words = px.histogram(data_frame=df2, x='review', y='count', template='plotly_white', title="Quantidade de Ocorrências de Bigramas", width=900, height=600)
+plot_bigram_words = px.histogram(data_frame=df2, x='review', y='count', 
+                                 template='plotly_white', title="Quantidade de Ocorrências de Bigramas", 
+                                 width=900, height=600)
 plot_bigram_words.update_xaxes(categoryorder='total descending', title='Bigram Words').update_yaxes(title='Count')
 
 # Trigram counts
 common_words3 = get_top_n_trigram(df['clean_text'], 30)
 df3 = pd.DataFrame(common_words3, columns = ['review' , 'count'])
-plot_trigram_words = px.histogram(data_frame=df3, template='plotly_white', x='review', y='count', title="Quantidade de Ocorrências de Trigramas", width=900, height=600)
+plot_trigram_words = px.histogram(data_frame=df3, template='plotly_white', x='review', y='count', 
+                                  title="Quantidade de Ocorrências de Trigramas", 
+                                  width=900, height=600)
 plot_trigram_words.update_xaxes(categoryorder='total descending', title='Trigram Words').update_yaxes(title='Count')
 
 # Number of tweets per date
-fig_tweets_por_data = px.histogram(df, x='datetime', template='plotly_white', title='Número de tweets por Data', width=900, height=600)
+fig_tweets_por_data = px.histogram(df, x='datetime', 
+                                   template='plotly_white', 
+                                   title='Número de tweets por Data', 
+                                   width=900, height=600)
 fig_tweets_por_data.update_xaxes(categoryorder='category descending', title='Date').update_yaxes(title='Número de tweets')
 
 # Number of tweets per word count
-fig_quantidade_de_palavras = px.histogram(df, x='word_count', template='plotly_white', title='Número de tweets por quantidade de palavras', width=900, height=600)
+fig_quantidade_de_palavras = px.histogram(df, x='word_count', 
+                                          template='plotly_white', 
+                                          title='Número de tweets por quantidade de palavras', 
+                                          width=900, height=600)
 fig_quantidade_de_palavras.update_xaxes(categoryorder='total descending', title='Número de palavras').update_yaxes(title='Número de tweets')
 
 # Number of tweets added since last week
@@ -133,14 +161,23 @@ date_x_likes_plot.update_xaxes(categoryorder='category descending', title='Date'
 verified_df = df.verified.value_counts().reset_index().rename(columns={'index':'verified', 'verified':'count'})
 
 # Followers x likes
-followers_x_likes_plot = px.scatter(data_frame=df, x='followers', y='likes', template='plotly_white', title='Quantidade de Seguidores X Likes em Tweets', width=900, height=600)
+followers_x_likes_plot = px.scatter(data_frame=df, x='followers', y='likes', 
+                                    template='plotly_white', 
+                                    title='Quantidade de Seguidores X Likes em Tweets', 
+                                    width=900, height=600)
 
 # Followers x retweets
-followers_x_retweets_plot = px.scatter(data_frame=df, x='followers', y='retweets', template='plotly_white', title='Quantidade de Seguidores X Retweets', width=900, height=600)
+followers_x_retweets_plot = px.scatter(data_frame=df, x='followers', y='retweets', 
+                                       template='plotly_white', 
+                                       title='Quantidade de Seguidores X Retweets', 
+                                       width=900, height=600)
 followers_x_retweets_plot
 
 # Retweets in time
-date_x_retweets_plot = px.histogram(df, x='datetime', y='retweets', template='plotly_white', width=900, height=600, title='Quantidade de Retweets no Tempo')
+date_x_retweets_plot = px.histogram(df, x='datetime', y='retweets', 
+                                    template='plotly_white', 
+                                    width=900, height=600, 
+                                    title='Quantidade de Retweets no Tempo')
 date_x_retweets_plot.update_xaxes(categoryorder='category descending', title='Date').update_yaxes(title='Número de Retweets')
 
 # Username
@@ -153,6 +190,23 @@ username_plot.update_xaxes(categoryorder='total descending', title='Mentions').u
 location_df = df.location.value_counts().reset_index().rename(columns={'index':'location','location':'count'})
 location_plot = px.histogram(data_frame=location_df[:30], template='plotly_white', x='location', y='count', title='Localizações')
 location_plot.update_xaxes(categoryorder='total descending', title='Location').update_yaxes(title='Count')
+
+# Followers plot 
+con = psycopg2.connect(URI, sslmode='require')
+cur = con.cursor()
+
+sql = "select * from followers_candidate"
+
+cur.execute(sql)
+tupples = cur.fetchall()
+con.close()
+df_followers = pd.DataFrame(tupples, columns=['id', 'tweet_id', 'created_at', 'username', 'followers_count'])
+plot_followers = px.line(data_frame=df_followers, x='created_at', y='followers_count', 
+                         color='username', template='plotly_white', 
+                         title='Número de tweets por quantidade de palavras', 
+                         width=900, height=600)
+plot_followers.update_xaxes(title='Quantidade de Seguidores').update_yaxes(title='Data')
+
 
 # Building report in Datapane
 report = dp.Report(
@@ -172,8 +226,9 @@ report = dp.Report(
           value=f"{verified_df.values[0][1]:,}"
       ), columns=3
    ),
-   dp.Plot(wordcloud_figure),
+   dp.Plot(plot_followers),
     dp.Plot(fig_tweets_por_data),
+    dp.Plot(wordcloud_figure),
     dp.Plot(plot_mentions),
     dp.Plot(plot_hashtags),
    dp.Group(
@@ -193,5 +248,5 @@ report = dp.Report(
     dp.DataTable(df.sample(1000))
 )
 
-report.upload(name="Ayala Project Report", 
+report.upload(name="Ayala Project - Political Dashboard", 
               publicly_visible=True)
