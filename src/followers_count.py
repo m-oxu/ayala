@@ -58,3 +58,4 @@ def followers_count(self):
 
         supabase_cur.execute(sql_query)
     supabase_con.commit()
+    supabase_con.close()
