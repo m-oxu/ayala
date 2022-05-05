@@ -1,8 +1,6 @@
-name: Ayala - Schedule
+name: Followers Count - Manually
 
-on: 
-  schedule:
-      - cron: "0 */2 * * *"
+on: workflow_dispatch
 
 jobs:
   build:
