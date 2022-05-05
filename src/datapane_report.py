@@ -51,7 +51,7 @@ df.datetime = pd.to_datetime(df.datetime)
       
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
 
-df['clean_text'] = preprocessing_data(df=df.text, stop_port=stop_port)
+df['clean_text'] = df.text.apply(preprocessing_data)
 
 #########################################################################################################################
 ################################################## Data Enrichment ######################################################
