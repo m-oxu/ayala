@@ -15,7 +15,7 @@ requirement_list = ["python-dotenv==0.20.0",
 install_packages(requirement_list)
 
 import datapane as dp
-from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt
+from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt, is_positive
 from datetime import datetime, timedelta
 import pandas as pd
 import psycopg2
