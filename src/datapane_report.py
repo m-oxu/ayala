@@ -300,5 +300,5 @@ report = dp.Report(
     dp.DataTable(df.sample(1000))
 )
 
-report.upload(name="Ayala Project Report", 
+report.upload(name="Ayala Project - Political Dashboard", 
               publicly_visible=True)
