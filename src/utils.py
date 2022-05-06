@@ -45,14 +45,6 @@ def get_top_n_trigram(corpus, n=None):
     words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
     return words_freq[:n]
 
-def query_followers(username, df_followers):
-    pysqldf = lambda q: sqldf(q, globals())
-    query_bl = f"""SELECT * 
-       FROM df_followers 
-       WHERE username LIKE "%{username}%" ORDER BY followers_count desc;"""
-
-    return pysqldf(query_bl)
-
 def difference_today_yt(df):
     df['date'] = (pd.to_datetime(df.created_at).dt.date).astype('str')
     today_date = str(pd.to_datetime(datetime.now())).split()[0]
