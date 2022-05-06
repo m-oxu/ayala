@@ -2,6 +2,7 @@ import re
 from sklearn.feature_extraction.text import CountVectorizer
 import unicodedata2 as unicodedata
 import requests
+from pandasql import sqldf
 
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
 def preprocessing_data(df):
@@ -42,3 +43,22 @@ def get_top_n_trigram(corpus, n=None):
     words_freq = [(word, sum_words[0, idx]) for word, idx in vec.vocabulary_.items()]
     words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
     return words_freq[:n]
+
+def query_followers(username):
+    pysqldf = lambda q: sqldf(q, globals())
+    query_bl = f"""SELECT * 
+       FROM df_followers 
+       WHERE username LIKE "%{username}%" ORDER BY followers_count desc;"""
+
+    return pysqldf(query_bl)
+
+def difference_today_yt(df):
+    df['date'] = (pd.to_datetime(df.created_at).dt.date).astype('str')
+    today_date = str(pd.to_datetime(datetime.now())).split()[0]
+    yesterday_date = str(pd.to_datetime(datetime.now() - timedelta(days=1))).split()[0]
+    today_followers = df.query("date == @today_date").followers_count.max()
+    difference = df.query("date == @today_date").followers_count.max() - df.query("date == @yesterday_date").followers_count.max()
+    return today_followers, difference
+
+def is_positive(value):
+    return value > 0
