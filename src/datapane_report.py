@@ -9,12 +9,13 @@ requirement_list = ["python-dotenv==0.20.0",
 "yellowbrick==1.4",
 "scikit-learn==1.0.2",
 "plotly==5.7.0",
-"unicodedata2==14.0.0"]
+"unicodedata2==14.0.0",
+"pandasql==0.7.3"]
 
 install_packages(requirement_list)
 
 import datapane as dp
-from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words
+from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, query_followers, difference_today_yt
 from datetime import datetime, timedelta
 import pandas as pd
 import psycopg2
@@ -56,9 +57,10 @@ df = pd.DataFrame(tupples, columns=['datetime',
 #########################################################################################################################
 
 df.datetime = pd.to_datetime(df.datetime)
-# Importing stopwords from assets/data
+# Importing stopwords from src
       
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
+stop_port = [unidecode(i) for i in stop_port]
 
 df['clean_text'] = df.text.apply(preprocessing_data)
 
@@ -181,14 +183,14 @@ date_x_retweets_plot = px.histogram(df, x='datetime', y='retweets',
 date_x_retweets_plot.update_xaxes(categoryorder='category descending', title='Date').update_yaxes(title='Número de Retweets')
 
 # Username
-username_df = df.username.value_counts().reset_index().rename(columns={'index':'username', 'username':'count'})
-username_plot = px.histogram(data_frame=username_df[:30], template='plotly_white', x='username', y='count', title='Quantidade de Usuários')
-username_plot.update_xaxes(categoryorder='total descending', title='Mentions').update_yaxes(title='Count')
+username_df = df.groupby('username').text.count().reset_index().sort_values('text', ascending=False)
+username_plot = px.histogram(data_frame=username_df[:30], template='plotly_white', x='username', y='text', title='Os 30 Usuários mais Engajados')
+username_plot.update_xaxes(categoryorder='total descending', title='Usuários').update_yaxes(title='Número de tweets')
 
 # Location plot
 
-location_df = df.location.value_counts().reset_index().rename(columns={'index':'location','location':'count'})
-location_plot = px.histogram(data_frame=location_df[:30], template='plotly_white', x='location', y='count', title='Localizações')
+location_df = df.groupby('location').text.count().reset_index().sort_values('text', ascending=False)
+location_plot = px.histogram(data_frame=location_df[:30], template='plotly_white', x='location', y='text', title='As 30 Localizações mais Frequentes')
 location_plot.update_xaxes(categoryorder='total descending', title='Location').update_yaxes(title='Count')
 
 # Followers plot 
@@ -207,27 +209,66 @@ plot_followers = px.line(data_frame=df_followers, x='created_at', y='followers_c
                          width=900, height=600)
 plot_followers.update_xaxes(title='Quantidade de Seguidores').update_yaxes(title='Data')
 
+# Número de seguidores por pré-candidato
+jairbolsonaro = query_followers('jairbolsonaro')
+veralucia = query_followers('verapstu')
+leopericles = query_followers('LeoPericlesUP')
+lula = query_followers('LulaOficial')
+ajanones = query_followers('AndreJanonesAdv')
+cirogomes = query_followers('cirogomes')
+lfdavila = query_followers('lfdavilaoficial')
 
-df['date'] = df.datetime.dt.date
-yesterday = df.date.max() - timedelta(days=1)
+jairbolsonaro_today_fol, jairbolsonaro_seg_diff = difference_today_yt(jairbolsonaro)
+veralucia_today_fol, veralucia_seg_diff = difference_today_yt(veralucia)
+leopericles_today_fol, leopericles_seg_diff = difference_today_yt(leopericles)
+lula_today_fol, lula_seg_diff = difference_today_yt(lula)
+ajanones_today_fol, ajanones_seg_diff = difference_today_yt(ajanones)
+lfdavila_today_fol, lfdavila_seg_diff = difference_today_yt(lfdavila)
+cirogomes_today_fol, cirogomes_seg_diff = difference_today_yt(cirogomes)
+
+
+df['date'] = (pd.to_datetime(df.datetime).dt.date).astype('str')
+today_date_tweet = str(pd.to_datetime(datetime.now())).split()[0]
+yesterday_date_tweet = str(pd.to_datetime(datetime.now() - timedelta(days=1))).split()[0]
+difference_tweets = len(df.query("date == @today_date_tweet")) - len(df.query("date == @yesterday_date_tweet"))
 
 report = dp.Report(
-   dp.Group(
-      dp.BigNumber(
-         heading="Número de Tweets Armazenados", 
-         value=f"{len(df):,}",
-         change=f"{len(df.query('date > @yesterday')):,} tweets desde ontem",
-         is_upward_change=True
-      ),
-      dp.BigNumber(
-        heading='Usuários Verificados',
-        value=f"{verified_df.values[1][1]:,}"
-      ),
-      dp.BigNumber(
-          heading='Usuários Não-Verificados',
-          value=f"{verified_df.values[0][1]:,}"
-      ), columns=3
-   ),
+    dp.BigNumber(
+        heading="Número de Tweets Armazenados", 
+        value=f"{len(df):,}",
+        change=f"{(difference_tweets * -1):,}",
+        is_upward_change=is_positive(difference_tweets)),
+    dp.Group(
+        dp.BigNumber(heading="Seguidores de @jairbolsonaro",
+                    value=f"{jairbolsonaro_today_fol:,}",
+                    change=f"{jairbolsonaro_seg_diff:,}",
+                    is_upward_change=is_positive(jairbolsonaro_seg_diff)),
+        dp.BigNumber(heading="Seguidores de @LulaOficial",
+                    value=f"{lula_today_fol:,}",
+                    change=f"{lula_seg_diff:,}",
+                    is_upward_change=is_positive(lula_seg_diff)),
+        dp.BigNumber(heading="Seguidores de @cirogomes",
+                    value=f"{cirogomes_today_fol:,}",
+                    change=f"{cirogomes_seg_diff:,}",
+                    is_upward_change=is_positive(cirogomes_seg_diff)), columns=3),
+    dp.Group(
+        dp.BigNumber(heading="Seguidores de Jair @LeoPericlesUP",
+                    value=f"{leopericles_today_fol:,}",
+                    change=f"{leopericles_seg_diff:,}",
+                    is_upward_change=is_positive(leopericles_seg_diff)),
+        dp.BigNumber(heading="Seguidores de @AndreJanonesAdv",
+                    value=f"{ajanones_today_fol:,}",
+                    change=f"{ajanones_seg_diff:,}",
+                    is_upward_change=is_positive(ajanones_seg_diff)),
+        dp.BigNumber(heading="Seguidores de @verapstu",
+                    value=f"{veralucia_today_fol:,}",
+                    change=f"{veralucia_seg_diff:,}",
+                    is_upward_change=is_positive(veralucia_seg_diff)),
+        dp.BigNumber(heading="Seguidores de @lfdavilaoficial",
+                    value=f"{lfdavila_today_fol:,}",
+                    change=f"{lfdavila_seg_diff:,}",
+                    is_upward_change=is_positive(lfdavila_seg_diff)), columns=4
+    ),
    dp.Plot(plot_followers),
     dp.Plot(fig_tweets_por_data),
     dp.Plot(wordcloud_figure),
@@ -250,5 +291,5 @@ report = dp.Report(
     dp.DataTable(df.sample(1000))
 )
 
-report.upload(name="Ayala Project - Political Dashboard", 
+report.upload(name="Ayala Project Report", 
               publicly_visible=True)
