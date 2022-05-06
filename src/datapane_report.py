@@ -15,7 +15,7 @@ requirement_list = ["python-dotenv==0.20.0",
 install_packages(requirement_list)
 
 import datapane as dp
-from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, query_followers, difference_today_yt
+from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt
 from datetime import datetime, timedelta
 import pandas as pd
 import psycopg2
@@ -209,14 +209,22 @@ plot_followers = px.line(data_frame=df_followers, x='created_at', y='followers_c
                          width=900, height=600)
 plot_followers.update_xaxes(title='Quantidade de Seguidores').update_yaxes(title='Data')
 
+def query_followers(username):
+    pysqldf = lambda q: sqldf(q, globals())
+    query_bl = f"""SELECT * 
+       FROM df_followers 
+       WHERE username LIKE "%{username}%" ORDER BY followers_count desc;"""
+
+    return pysqldf(query_bl)
+
 # Número de seguidores por pré-candidato
-jairbolsonaro = query_followers('jairbolsonaro', df_followers)
-veralucia = query_followers('verapstu', df_followers)
-leopericles = query_followers('LeoPericlesUP', df_followers)
-lula = query_followers('LulaOficial', df_followers)
-ajanones = query_followers('AndreJanonesAdv', df_followers)
-cirogomes = query_followers('cirogomes', df_followers)
-lfdavila = query_followers('lfdavilaoficial', df_followers)
+jairbolsonaro = query_followers('jairbolsonaro')
+veralucia = query_followers('verapstu')
+leopericles = query_followers('LeoPericlesUP')
+lula = query_followers('LulaOficial')
+ajanones = query_followers('AndreJanonesAdv')
+cirogomes = query_followers('cirogomes')
+lfdavila = query_followers('lfdavilaoficial')
 
 jairbolsonaro_today_fol, jairbolsonaro_seg_diff = difference_today_yt(jairbolsonaro)
 veralucia_today_fol, veralucia_seg_diff = difference_today_yt(veralucia)
