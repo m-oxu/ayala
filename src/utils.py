@@ -45,7 +45,7 @@ def get_top_n_trigram(corpus, n=None):
     words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
     return words_freq[:n]
 
-def query_followers(username):
+def query_followers(username, df_followers):
     pysqldf = lambda q: sqldf(q, globals())
     query_bl = f"""SELECT * 
        FROM df_followers 
