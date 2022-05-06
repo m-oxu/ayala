@@ -192,7 +192,7 @@ location_plot = px.histogram(data_frame=location_df[:30], template='plotly_white
 location_plot.update_xaxes(categoryorder='total descending', title='Location').update_yaxes(title='Count')
 
 # Followers plot 
-con = psycopg2.connect(URI, sslmode='require')
+con = psycopg2.connect(supabase_uri, sslmode='require')
 cur = con.cursor()
 
 sql = "select * from followers_candidate"
