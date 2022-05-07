@@ -4,6 +4,7 @@ import unicodedata2 as unicodedata
 import requests
 from pandasql import sqldf
 from datetime import datetime, timedelta
+import pandas as pd
 
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
 def preprocessing_data(df):
