@@ -23,9 +23,6 @@ jobs:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('**/poetry.lock') }}
       
-      - name: Install dependencies
-        run: poetry install
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       
       - uses: datapane/build-action@v2
         env:
@@ -33,4 +30,7 @@ jobs:
         with:
           script: "src/datapane_report.py"
           token: ${{ secrets.DATAPANE_TOKEN }}
+      - name: Install dependencies
+        run: poetry install
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
 
