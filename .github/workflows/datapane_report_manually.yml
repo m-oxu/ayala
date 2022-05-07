@@ -11,8 +11,8 @@ jobs:
           python-version: 3.x     
       
       - uses: datapane/build-action@v2
-        with:
-          script: "src/datapane_report.py"
-          token: ${{ secrets.DATAPANE_TOKEN }}
         env:
           SUPABASE_URI: ${{ secrets.SUPABASE_URI }}
+          script: "src/datapane_report.py"
+          token: ${{ secrets.DATAPANE_TOKEN }}
+
