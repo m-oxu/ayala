@@ -315,5 +315,5 @@ report = dp.Report(
     dp.DataTable(df.sample(1000))
 )
 
-report.upload(name="Ayala Project - Political Report Weekly", 
+report.upload(name=f"Ayala Project - Political Report Weekly ({today_date})", 
               publicly_visible=True)
