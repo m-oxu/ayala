@@ -1,21 +1,5 @@
-from requirements_install import install_packages
-requirement_list = ["python-dotenv==0.20.0",
-"psycopg2-binary==2.9.3",
-"pandas==1.4.2",
-"sqlalchemy==1.4.36",
-"datapane==0.14.0",
-"unidecode==1.3.4",
-"wordcloud==1.8.1",
-"yellowbrick==1.4",
-"scikit-learn==1.0.2",
-"plotly==5.7.0",
-"unicodedata2==14.0.0",
-"pandasql==0.7.3"]
-
-install_packages(requirement_list)
-
 import datapane as dp
-from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt
+from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt, is_positive
 from datetime import datetime, timedelta
 import pandas as pd
 import psycopg2
@@ -33,6 +17,7 @@ from datapane.client.api.report.blocks import BigNumber
 import requests
 from pandasql import sqldf
 
+load_dotenv('.env')
 supabase_uri = os.environ.get("SUPABASE_URI")
 con = psycopg2.connect(supabase_uri, sslmode='require')
 cur = con.cursor()
@@ -57,6 +42,7 @@ df = pd.DataFrame(tupples, columns=['datetime',
 ################################################## Data Pre-processing ##################################################
 #########################################################################################################################
 
+date = dp.Params.get('Escolha a data', ['Asia', 'North America'])
 df.datetime = pd.to_datetime(df.datetime)
 # Importing stopwords from src
       
@@ -251,32 +237,39 @@ report = dp.Report(
         dp.BigNumber(heading="Seguidores de @jairbolsonaro",
                     value=f"{jairbolsonaro_today_fol:,}",
                     change=f"{jairbolsonaro_seg_diff:,}",
-                    is_upward_change=is_positive(jairbolsonaro_seg_diff)),
+                    is_upward_change=is_positive(jairbolsonaro_seg_diff),
+                    name='jairfollowers'),
         dp.BigNumber(heading="Seguidores de @LulaOficial",
                     value=f"{lula_today_fol:,}",
                     change=f"{lula_seg_diff:,}",
-                    is_upward_change=is_positive(lula_seg_diff)),
+                    is_upward_change=is_positive(lula_seg_diff),
+                    name='lulafollowers'),
         dp.BigNumber(heading="Seguidores de @cirogomes",
                     value=f"{cirogomes_today_fol:,}",
                     change=f"{cirogomes_seg_diff:,}",
-                    is_upward_change=is_positive(cirogomes_seg_diff)), columns=3),
+                    is_upward_change=is_positive(cirogomes_seg_diff),
+                    name='cirofollowers'), columns=3),
     dp.Group(
         dp.BigNumber(heading="Seguidores de Jair @LeoPericlesUP",
                     value=f"{leopericles_today_fol:,}",
                     change=f"{leopericles_seg_diff:,}",
-                    is_upward_change=is_positive(leopericles_seg_diff)),
+                    is_upward_change=is_positive(leopericles_seg_diff),
+                    name='leofollowers'),
         dp.BigNumber(heading="Seguidores de @AndreJanonesAdv",
                     value=f"{ajanones_today_fol:,}",
                     change=f"{ajanones_seg_diff:,}",
-                    is_upward_change=is_positive(ajanones_seg_diff)),
+                    is_upward_change=is_positive(ajanones_seg_diff),
+                    name='janonesfollowers'),
         dp.BigNumber(heading="Seguidores de @verapstu",
                     value=f"{veralucia_today_fol:,}",
                     change=f"{veralucia_seg_diff:,}",
-                    is_upward_change=is_positive(veralucia_seg_diff)),
+                    is_upward_change=is_positive(veralucia_seg_diff),
+                    name='verafollowers'),
         dp.BigNumber(heading="Seguidores de @lfdavilaoficial",
                     value=f"{lfdavila_today_fol:,}",
                     change=f"{lfdavila_seg_diff:,}",
-                    is_upward_change=is_positive(lfdavila_seg_diff)), columns=4
+                    is_upward_change=is_positive(lfdavila_seg_diff),
+                    name='felipefollowers'), columns=4
     ),
    dp.Plot(plot_followers),
     dp.Plot(fig_tweets_por_data),
@@ -300,5 +293,5 @@ report = dp.Report(
     dp.DataTable(df.sample(1000))
 )
 
-report.upload(name="Ayala Project Report", 
+report.upload(name="Ayala Project - Political Dashboard", 
               publicly_visible=True)
