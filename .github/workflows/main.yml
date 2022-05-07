@@ -1,0 +1,19 @@
+on: 
+  schedule:
+    - cron: "0 0 * * 0"
+jobs:
+  build_report:
+    runs-on: ubuntu-latest
+    name: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.x     
+      
+      - uses: datapane/build-action@v2
+        env:
+          SUPABASE_URI: ${{ secrets.SUPABASE_URI }}
+        with:
+          script: "src/datapane_report_weekly.py"
+          token: ${{ secrets.DATAPANE_TOKEN }}
