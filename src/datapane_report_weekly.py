@@ -58,6 +58,9 @@ df = pd.DataFrame(tupples, columns=['datetime',
 #########################################################################################################################
 ################################################## Data Pre-processing ##################################################
 #########################################################################################################################
+df.datetime = pd.to_datetime(df.datetime)
+df['date'] = df.datetime.dt.date
+
 today_date = date.today()
 last_week_date = date.today() - timedelta(days=7)
 df = df.query("date <= @today_date and date >= @last_week_date")
