@@ -56,8 +56,8 @@ def difference_today_yt(df):
 
 def growth_rate(df, username):
     df['date'] = pd.to_datetime(df.datetime).dt.date
-    today_date = date.today()
-    last_week_date = today_date - timedelta(days=7)
+    today_date = date.today() - timedelta(days=1)
+    last_week_date = today_date - timedelta(days=8)
     
     df_username = df.query('mentions == @username')
     mention_today = len(df_username.query('date == @today_date'))
