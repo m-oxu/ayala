@@ -54,16 +54,21 @@ def difference_today_yt(df):
     difference = df.query("date == @today_date").followers_count.max() - df.query("date == @last_week_date").followers_count.max()
     return today_followers, difference
 
-def growth_rate(username, df):
+def growth_rate(df, username):
     df['date'] = pd.to_datetime(df.datetime).dt.date
     today_date = date.today() - timedelta(days=1)
     last_week_date = today_date - timedelta(days=8)
-    
+
     df_username = df.query('mentions == @username')
     mention_today = len(df_username.query('date == @today_date'))
     mention_last_week = len(df_username.query('date == @last_week_date'))
+    total_mentions_week = len(df_username.query('date <= @today_date and date >= @last_week_date'))
     
-    return 100 * ((mention_today - mention_last_week)/mention_last_week)
+    if mention_last_week > 0:
+        rate_percentual = 100 * ((mention_today - mention_last_week)/mention_last_week)
+        return rate_percentual, total_mentions_week
+    else:
+        return 0, total_mentions_week
     
     
 
