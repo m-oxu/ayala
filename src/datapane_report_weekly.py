@@ -16,7 +16,7 @@ requirement_list = ["python-dotenv==0.20.0",
 install_packages(requirement_list)
 
 import datapane as dp
-from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt, is_positive
+from utils import preprocessing_data, get_top_n_bigram, get_top_n_trigram, get_top_n_words, difference_today_yt, is_positive, growth_rate
 from datetime import datetime, timedelta, date
 import pandas as pd
 import psycopg2
@@ -244,10 +244,20 @@ lfdavila_today_fol, lfdavila_seg_diff = difference_today_yt(lfdavila)
 cirogomes_today_fol, cirogomes_seg_diff = difference_today_yt(cirogomes)
 
 
-df['date'] = (pd.to_datetime(df.datetime).dt.date).astype('str')
-today_date_tweet = str(pd.to_datetime(datetime.now())).split()[0]
-yesterday_date_tweet = str(pd.to_datetime(datetime.now() - timedelta(days=1))).split()[0]
+df['date'] = pd.to_datetime(df.datetime).dt.date
+today_date_tweet = date.today()
+yesterday_date_tweet = today_date_tweet - timedelta(days=7)
 difference_tweets = len(df.query("date == @today_date_tweet")) - len(df.query("date == @yesterday_date_tweet"))
+
+# Percentual de menções
+
+gr_jair, jairbolsonaro_mentions = growth_date('@jairbolsonaro', df)
+gr_lula, lula_mentions = growth_date('@lulaoficial', df)
+gr_vera, vera_mentions = growth_date('@verapstu', df)
+gr_janones, janones_mentions = growth_date('@andrejanonesadv', df)
+gr_leo, leo_mentions = growth_date('@leopericlesup', df)
+gr_ciro, cirogomes_mentions = growth_date('@cirogomes', df)
+gr_davila, davila_mentions = growth_date('@lfdavilaoficial', df)
 
 report = dp.Report(
     dp.BigNumber(
@@ -296,6 +306,38 @@ report = dp.Report(
    dp.Plot(plot_followers),
     dp.Plot(fig_tweets_por_data),
     dp.Plot(wordcloud_figure),
+  dp.Group(
+  dp.BigNumber(heading="Menções Totais dessa Semana de @jairbolsonaro",
+              value=f"{jairbolsonaro_mentions:,}",
+              change=f"{round(gr_jair, 2)}%",
+              is_upward_change=is_positive(gr_jair))
+  dp.BigNumber(heading="Menções Totais dessa Semana de @lulaoficial",
+              value=f"{lula_mentions:,}",
+              change=f"{round(gr_lula, 2)}%",
+              is_upward_change=is_positive(gr_lula)),
+  dp.BigNumber(heading="Menções Totais dessa Semana de @cirogomes",
+              value=f"{cirogomes_mentions:,}",
+              change=f"{round(gr_ciro, 2)}%",
+              is_upward_change=is_positive(gr_ciro)),
+  columns=3),
+  dp.Group(
+    dp.BigNumber(heading="Menções Totais dessa Semana de @leopericlesup",
+              value=f"{leo_mentions:,}",
+              change=f"{round(gr_leo, 2)}%",
+              is_upward_change=is_positive(gr_leo)),
+  dp.BigNumber(heading="Menções Totais dessa Semana de @veralucia",
+              value=f"{vera_mentions:,}",
+              change=f"{round(gr_vera, 2)}%",
+              is_upward_change=is_positive(gr_vera)),
+  dp.BigNumber(heading="Menções Totais dessa Semana de @andrejanonesadv",
+              value=f"{janones_mentions:,}",
+              change=f"{round(gr_janones, 2)}%",
+              is_upward_change=is_positive(gr_janones)),
+  dp.BigNumber(heading="Menções Totais dessa Semana de @dfdavilaoficial",
+              value=f"{davila_mentions:,}",
+              change=f"{round(gr_davila, 2)}%",
+              is_upward_change=is_positive(gr_davila)),
+  columns=4),
     dp.Plot(plot_mentions),
     dp.Plot(plot_hashtags),
    dp.Group(
