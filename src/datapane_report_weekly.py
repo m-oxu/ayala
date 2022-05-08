@@ -251,13 +251,13 @@ difference_tweets = len(df.query("date == @today_date_tweet")) - len(df.query("d
 
 # Percentual de menções
 
-gr_jair, jairbolsonaro_mentions = growth_date('@jairbolsonaro', df)
-gr_lula, lula_mentions = growth_date('@lulaoficial', df)
-gr_vera, vera_mentions = growth_date('@verapstu', df)
-gr_janones, janones_mentions = growth_date('@andrejanonesadv', df)
-gr_leo, leo_mentions = growth_date('@leopericlesup', df)
-gr_ciro, cirogomes_mentions = growth_date('@cirogomes', df)
-gr_davila, davila_mentions = growth_date('@lfdavilaoficial', df)
+gr_jair, jairbolsonaro_mentions = growth_rate('@jairbolsonaro', df)
+gr_lula, lula_mentions = growth_rate('@lulaoficial', df)
+gr_vera, vera_mentions = growth_rate('@verapstu', df)
+gr_janones, janones_mentions = growth_rate('@andrejanonesadv', df)
+gr_leo, leo_mentions = growth_rate('@leopericlesup', df)
+gr_ciro, cirogomes_mentions = growth_rate('@cirogomes', df)
+gr_davila, davila_mentions = growth_rate('@lfdavilaoficial', df)
 
 report = dp.Report(
     dp.BigNumber(
