@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import unicodedata2 as unicodedata
 import requests
 from pandasql import sqldf
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import pandas as pd
 
 stop_port = requests.get("https://raw.githubusercontent.com/m-oxu/ayala/main/src/stopwords-pt.txt").text.split()
@@ -47,9 +47,9 @@ def get_top_n_trigram(corpus, n=None):
     return words_freq[:n]
 
 def difference_today_yt(df):
-    df['date'] = (pd.to_datetime(df.created_at).dt.date).astype('str')
-    today_date = str(pd.to_datetime(datetime.now())).split()[0]
-    yesterday_date = str(pd.to_datetime(datetime.now() - timedelta(days=1))).split()[0]
+    df['date'] = pd.to_datetime(df.created_at).dt.date
+    today_date = date.today()
+    last_week_date = today_date - timedelta(days=7)
     today_followers = df.query("date == @today_date").followers_count.max()
     difference = df.query("date == @today_date").followers_count.max() - df.query("date == @yesterday_date").followers_count.max()
     return today_followers, difference
