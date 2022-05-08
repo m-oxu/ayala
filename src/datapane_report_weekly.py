@@ -61,18 +61,8 @@ df = pd.DataFrame(tupples, columns=['datetime',
 df.datetime = pd.to_datetime(df.datetime)
 df['date'] = df.datetime.dt.date
 
-# Percentual de menções
-
-gr_jair, jairbolsonaro_mentions = growth_rate('@jairbolsonaro', df)
-gr_lula, lula_mentions = growth_rate('@lulaoficial', df)
-gr_vera, vera_mentions = growth_rate('@verapstu', df)
-gr_janones, janones_mentions = growth_rate('@andrejanonesadv', df)
-gr_leo, leo_mentions = growth_rate('@leopericlesup', df)
-gr_ciro, cirogomes_mentions = growth_rate('@cirogomes', df)
-gr_davila, davila_mentions = growth_rate('@lfdavilaoficial', df)
-
 today_date = date.today()
-last_week_date = date.today() - timedelta(days=7)
+last_week_date = date.today() - timedelta(days=8)
 df = df.query("date <= @today_date and date >= @last_week_date")
 
 df.datetime = pd.to_datetime(df.datetime)
@@ -253,6 +243,15 @@ ajanones_today_fol, ajanones_seg_diff = difference_today_yt(ajanones)
 lfdavila_today_fol, lfdavila_seg_diff = difference_today_yt(lfdavila)
 cirogomes_today_fol, cirogomes_seg_diff = difference_today_yt(cirogomes)
 
+# Percentual de menções
+
+gr_jair, jairbolsonaro_mentions = growth_rate('@jairbolsonaro', df)
+gr_lula, lula_mentions = growth_rate('@lulaoficial', df)
+gr_vera, vera_mentions = growth_rate('@verapstu', df)
+gr_janones, janones_mentions = growth_rate('@andrejanonesadv', df)
+gr_leo, leo_mentions = growth_rate('@leopericlesup', df)
+gr_ciro, cirogomes_mentions = growth_rate('@cirogomes', df)
+gr_davila, davila_mentions = growth_rate('@lfdavilaoficial', df)
 
 df['date'] = pd.to_datetime(df.datetime).dt.date
 today_date_tweet = date.today()
