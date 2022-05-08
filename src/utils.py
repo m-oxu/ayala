@@ -49,10 +49,11 @@ def get_top_n_trigram(corpus, n=None):
 def difference_today_yt(df):
     df['date'] = pd.to_datetime(df.created_at).dt.date
     today_date = date.today() - timedelta(days=1)
-    last_week_date = today_date - timedelta(days=8)
+    last_week_date = date.today() - timedelta(days=7)
     today_followers = df.query("date == @today_date").followers_count.max()
-    difference = df.query("date == @today_date").followers_count.max() - df.query("date == @last_week_date").followers_count.max()
-    return today_followers, difference
+    last_week_followers = df.query("date == @last_week_date").followers_count.max()
+    difference = today_followers - last_week_followers
+    return today_followers, 100 * (difference / last_week_followers)
 
 def growth_rate(username, df):
     df['date'] = pd.to_datetime(df.datetime).dt.date
