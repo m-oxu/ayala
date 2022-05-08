@@ -51,7 +51,7 @@ def difference_today_yt(df):
     today_date = date.today()
     last_week_date = today_date - timedelta(days=7)
     today_followers = df.query("date == @today_date").followers_count.max()
-    difference = df.query("date == @today_date").followers_count.max() - df.query("date == @yesterday_date").followers_count.max()
+    difference = df.query("date == @today_date").followers_count.max() - df.query("date == @last_week_date").followers_count.max()
     return today_followers, difference
 
 def is_positive(value):
