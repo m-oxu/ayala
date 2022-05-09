@@ -53,7 +53,7 @@ def difference_today_yt(df):
     today_followers = df.query("date == @today_date").followers_count.max()
     last_week_followers = df.query("date == @last_week_date").followers_count.max()
     difference = today_followers - last_week_followers
-    return today_followers, round(100 * (difference / last_week_followers), 2)
+    return today_followers, round(100 * (difference / last_week_followers), 4)
 
 def growth_rate(username, df):
     df['date'] = pd.to_datetime(df.datetime).dt.date
