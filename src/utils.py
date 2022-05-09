@@ -49,7 +49,7 @@ def get_top_n_trigram(corpus, n=None):
 def difference_today_yt(df):
     df['date'] = pd.to_datetime(df.created_at).dt.date
     today_date = date.today() - timedelta(days=1)
-    last_week_date = date.today() - timedelta(days=7)
+    last_week_date = date.today() - timedelta(days=2)
     today_followers = df.query("date == @today_date").followers_count.max()
     last_week_followers = df.query("date == @last_week_date").followers_count.max()
     difference = today_followers - last_week_followers
