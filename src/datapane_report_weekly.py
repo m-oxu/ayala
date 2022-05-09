@@ -147,13 +147,6 @@ plot_trigram_words = px.histogram(data_frame=df3, template='plotly_white', x='re
                                   width=900, height=600)
 plot_trigram_words.update_xaxes(categoryorder='total descending', title='Trigram Words').update_yaxes(title='Count')
 
-# Number of tweets per date
-fig_tweets_por_data = px.histogram(df, x='datetime', 
-                                   template='plotly_white', 
-                                   title='Número de tweets por Data', 
-                                   width=900, height=600)
-fig_tweets_por_data.update_xaxes(categoryorder='category descending', title='Date').update_yaxes(title='Número de tweets')
-
 # Number of tweets per word count
 fig_quantidade_de_palavras = px.histogram(df, x='word_count', 
                                           template='plotly_white', 
@@ -163,13 +156,6 @@ fig_quantidade_de_palavras.update_xaxes(categoryorder='total descending', title=
 
 # Number of tweets added since last week
 tweets_last_week = (df.datetime.dt.date > pd.to_datetime(str(pd.to_datetime(datetime.today() - timedelta(days=7))).split()[0])).value_counts().iloc[1]
-
-# Likes in time
-date_x_likes_plot = px.histogram(df, x='datetime', y='likes', template='plotly_white', width=900, height=600, title='Quantidade de Likes no Tempo')
-date_x_likes_plot.update_xaxes(categoryorder='category descending', title='Date').update_yaxes(title='Número de Likes')
-
-# Verified count
-verified_df = df.verified.value_counts().reset_index().rename(columns={'index':'verified', 'verified':'count'})
 
 # Followers x likes
 followers_x_likes_plot = px.scatter(data_frame=df, x='followers', y='likes', 
@@ -184,23 +170,12 @@ followers_x_retweets_plot = px.scatter(data_frame=df, x='followers', y='retweets
                                        width=900, height=600)
 followers_x_retweets_plot
 
-# Retweets in time
-date_x_retweets_plot = px.histogram(df, x='datetime', y='retweets', 
-                                    template='plotly_white', 
-                                    width=900, height=600, 
-                                    title='Quantidade de Retweets no Tempo')
-date_x_retweets_plot.update_xaxes(categoryorder='category descending', title='Date').update_yaxes(title='Número de Retweets')
 
 # Username
 username_df = df.groupby('username').text.count().reset_index().sort_values('text', ascending=False)
 username_plot = px.histogram(data_frame=username_df[:30], template='plotly_white', x='username', y='text', title='Os 30 Usuários mais Engajados')
 username_plot.update_xaxes(categoryorder='total descending', title='Usuários').update_yaxes(title='Número de tweets')
 
-# Location plot
-
-location_df = df.groupby('location').text.count().reset_index().sort_values('text', ascending=False)
-location_plot = px.histogram(data_frame=location_df[:30], template='plotly_white', x='location', y='text', title='As 30 Localizações mais Frequentes')
-location_plot.update_xaxes(categoryorder='total descending', title='Location').update_yaxes(title='Count')
 
 # Followers plot 
 con = psycopg2.connect(supabase_uri, sslmode='require')
@@ -304,7 +279,6 @@ report = dp.Report(
                     name='felipefollowers'), columns=4
     ),
    dp.Plot(plot_followers),
-    dp.Plot(fig_tweets_por_data),
     dp.Plot(wordcloud_figure),
   dp.Group(
   dp.BigNumber(heading="Menções Totais dessa Semana de @jairbolsonaro",
@@ -341,14 +315,9 @@ report = dp.Report(
     dp.Plot(plot_mentions),
     dp.Plot(plot_hashtags),
    dp.Group(
-       dp.Plot(date_x_likes_plot),
-       dp.Plot(date_x_retweets_plot), columns=2
-   ),
-   dp.Group(
        dp.Plot(followers_x_likes_plot),
        dp.Plot(followers_x_retweets_plot), columns=2
    ),
-   dp.Plot(location_plot),
     dp.Group(
         dp.Plot(plot_unigram_words),
         dp.Plot(plot_bigram_words), columns=2),
