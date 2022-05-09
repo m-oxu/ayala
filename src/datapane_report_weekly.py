@@ -61,7 +61,7 @@ df = pd.DataFrame(tupples, columns=['datetime',
 df.datetime = pd.to_datetime(df.datetime)
 df['date'] = df.datetime.dt.date
 
-today_date = date.today() - timdelta(days=1)
+today_date = date.today() - timedelta(days=1)
 last_week_date = date.today() - timedelta(days=8)
 df = df.query("date <= @today_date and date >= @last_week_date")
 
