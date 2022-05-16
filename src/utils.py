@@ -68,9 +68,9 @@ def growth_rate(username, df):
     if mention_last_week != 0:
         difference_td_lw = mention_today - mention_last_week
         rate_percentual = 100 * (difference_td_lw/mention_last_week)
-        return mention_today, mention_last_week, rate_percentual, total_mentions_week
+        return rate_percentual, total_mentions_week
     else:
-        return mention_today, mention_last_week, 0, total_mentions_week
+        return 0, total_mentions_week
     
     
 
