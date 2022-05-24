@@ -45,7 +45,7 @@ class TwitterSearch:
         self.tweet_list = []
         for query in query_list:
             # Using TwitterSearchScraper to scrape data since yesterday until now and append tweets to list
-            for tweet sntwitter.TwitterSearchScraper(f"""{query} 
+            for i, tweet sntwitter.TwitterSearchScraper(f"""{query} 
                                                          since:{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")} 
                                                           until:{datetime.now().strftime("%Y-%m-%d")}""").get_items():
                 self.tweet_list.append([tweet.date, 
