@@ -48,7 +48,7 @@ class TwitterSearch:
             for i, tweet in enumerate(sntwitter.TwitterSearchScraper(f"""{query} 
                                                                     since:{(datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")} 
                                                                     until:{datetime.now().strftime("%Y-%m-%d")}""").get_items()):
-                if i>1000:
+                if i>2000:
                     break
                 self.tweet_list.append([tweet.date, 
                                         tweet.id, 
