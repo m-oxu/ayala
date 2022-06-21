@@ -1,5 +1,5 @@
 # sourcery skip: avoid-builtin-shadow
-import tweepy
+#import tweepy
 from dotenv import Any, load_dotenv
 import os
 import psycopg2
